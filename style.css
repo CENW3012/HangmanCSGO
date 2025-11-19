@@ -1,0 +1,170 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                url('assets/images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+h1 {
+    font-size: 3rem;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    color: #ff6b6b;
+}
+
+.game-info {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 50px;
+    flex-wrap: wrap;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 30px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.hangman-image {
+    flex: 1;
+    max-width: 300px;
+}
+
+.hangman-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.game-controls {
+    flex: 1;
+    max-width: 500px;
+}
+
+.word-display {
+    font-size: 2.5rem;
+    letter-spacing: 10px;
+    margin: 30px 0;
+    font-weight: bold;
+    color: #4ecdc4;
+}
+
+.wrong-letters {
+    margin: 20px 0;
+    font-size: 1.2rem;
+}
+
+.wrong-letters span {
+    color: #ff6b6b;
+    font-weight: bold;
+    letter-spacing: 5px;
+}
+
+.keyboard {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 10px;
+    margin: 30px 0;
+    max-width: 500px;
+}
+
+.letter-btn {
+    padding: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    background: #4ecdc4;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #2d3436;
+}
+
+.letter-btn:hover {
+    background: #45b7af;
+    transform: translateY(-2px);
+}
+
+.letter-btn:disabled {
+    background: #636e72;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.letter-btn.correct {
+    background: #00b894;
+}
+
+.letter-btn.wrong {
+    background: #ff7675;
+}
+
+.game-status {
+    font-size: 1.5rem;
+    margin: 20px 0;
+    min-height: 40px;
+    font-weight: bold;
+}
+
+.game-status.win {
+    color: #00b894;
+}
+
+.game-status.lose {
+    color: #ff7675;
+}
+
+.reset-btn {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    background: #fd79a8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.reset-btn:hover {
+    background: #e84393;
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .game-info {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .keyboard {
+        grid-template-columns: repeat(7, 1fr);
+    }
+    
+    .word-display {
+        font-size: 2rem;
+        letter-spacing: 5px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+}
