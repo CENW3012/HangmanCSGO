@@ -1,6 +1,6 @@
 class HangmanGame {
     constructor() {
-        this.words = ['NEURON', 'WEIGHT', 'RELU', 'LAYER', 'BIAS', 'BATCH', 'STREAM', 'KAFKA', 'FLINK', 'SPARK'];
+        this.words = ['JAVASCRIPT', 'PROGRAMMING', 'DEVELOPER', 'COMPUTER', 'ALGORITHM'];
         this.word = '';
         this.guessedLetters = new Set();
         this.wrongLetters = new Set();
@@ -24,7 +24,7 @@ class HangmanGame {
     }
     
     init() {
-        this.startBackgroundMusic();
+        this.forceAudioPlay();
         this.createKeyboard();
         this.startNewGame();
         
@@ -33,11 +33,49 @@ class HangmanGame {
         });
     }
     
-    startBackgroundMusic() {
-        this.backgroundMusic.volume = 40;
-        this.backgroundMusic.play().catch(e => {
-            console.log('Audio play failed:', e);
-        });
+    forceAudioPlay() {
+        // Set audio properties to maximize autoplay success
+        this.backgroundMusic.volume = 0.3;
+        this.winSound.volume = 0.7;
+        this.loseSound.volume = 0.7;
+        
+        // Try multiple methods to play audio
+        const playAudio = () => {
+            this.backgroundMusic.play().then(() => {
+                console.log('Background music started automatically');
+            }).catch(error => {
+                console.log('Autoplay blocked, trying alternative method...');
+                this.alternativeAudioStart();
+            });
+        };
+        
+        // Wait for page to fully load
+        if (document.readyState === 'complete') {
+            playAudio();
+        } else {
+            window.addEventListener('load', playAudio);
+        }
+    }
+    
+    alternativeAudioStart() {
+        // Create a silent audio context to trick browsers
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            const audioContext = new AudioContext();
+            const oscillator = audioContext.createOscillator();
+            oscillator.connect(audioContext.destination);
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.001);
+            
+            // Now try playing the actual audio
+            setTimeout(() => {
+                this.backgroundMusic.play().catch(e => {
+                    console.log('All audio methods failed - user interaction required');
+                });
+            }, 100);
+        } catch (e) {
+            console.log('Alternative audio method failed');
+        }
     }
     
     createKeyboard() {
@@ -68,6 +106,11 @@ class HangmanGame {
             btn.disabled = false;
             btn.classList.remove('correct', 'wrong');
         });
+        
+        // Ensure background music is playing
+        if (this.backgroundMusic.paused) {
+            this.backgroundMusic.play().catch(e => console.log('Music resume failed'));
+        }
     }
     
     guessLetter(letter) {
@@ -118,13 +161,15 @@ class HangmanGame {
             this.gameOver = true;
             this.gameStatus.textContent = 'Congratulations! You won! 🎉';
             this.gameStatus.className = 'game-status win';
-            this.winSound.play();
+            this.winSound.currentTime = 0;
+            this.winSound.play().catch(e => console.log('Win sound failed'));
             this.disableKeyboard();
         } else if (this.wrongLetters.size >= this.maxWrong) {
             this.gameOver = true;
             this.gameStatus.textContent = `Game Over! The word was: ${this.word}`;
             this.gameStatus.className = 'game-status lose';
-            this.loseSound.play();
+            this.loseSound.currentTime = 0;
+            this.loseSound.play().catch(e => console.log('Lose sound failed'));
             this.disableKeyboard();
         }
     }
@@ -139,4 +184,13 @@ class HangmanGame {
 // Initialize the game when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     new HangmanGame();
+});
+
+// Last resort: try to play audio on any user interaction
+document.addEventListener('click', function enableAudio() {
+    const bgMusic = document.getElementById('background-music');
+    if (bgMusic.paused) {
+        bgMusic.play().catch(e => console.log('Final audio attempt failed'));
+    }
+    document.removeEventListener('click', enableAudio);
 });
