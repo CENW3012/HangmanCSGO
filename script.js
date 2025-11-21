@@ -1,6 +1,6 @@
 class HangmanGame {
     constructor() {
-        this.words = ['JAVASCRIPT', 'PROGRAMMING', 'DEVELOPER', 'COMPUTER', 'ALGORITHM'];
+        this.words = ['NEURON', 'WEIGHT', 'RELU', 'LAYER', 'BIAS', 'BATCH', 'STREAM', 'KAFKA', 'FLINK', 'SPARK'];
         this.word = '';
         this.guessedLetters = new Set();
         this.wrongLetters = new Set();
