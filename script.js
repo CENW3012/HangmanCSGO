@@ -6,7 +6,6 @@ class HangmanGame {
         this.wrongLetters = new Set();
         this.maxWrong = 6;
         this.gameOver = false;
-        this.audioEnabled = false;
         
         // Audio elements
         this.backgroundMusic = document.getElementById('background-music');
@@ -20,41 +19,24 @@ class HangmanGame {
         this.gameStatus = document.getElementById('game-status');
         this.keyboard = document.getElementById('keyboard');
         this.resetBtn = document.getElementById('reset-btn');
-        this.startBtn = document.getElementById('start-btn');
-        
-        // Set audio volume
-        this.backgroundMusic.volume = 0.3;
-        this.winSound.volume = 0.7;
-        this.loseSound.volume = 0.7;
         
         this.init();
     }
     
     init() {
+        this.startBackgroundMusic();
         this.createKeyboard();
-        
-        this.startBtn.addEventListener('click', () => {
-            this.enableAudio();
-            this.startBtn.style.display = 'none';
-            this.startNewGame();
-        });
+        this.startNewGame();
         
         this.resetBtn.addEventListener('click', () => {
             this.startNewGame();
         });
-        
-        // Enable audio on any user interaction
-        document.addEventListener('click', () => {
-            if (!this.audioEnabled) {
-                this.enableAudio();
-            }
-        });
     }
     
-    enableAudio() {
-        this.audioEnabled = true;
+    startBackgroundMusic() {
+        this.backgroundMusic.volume = 0.3;
         this.backgroundMusic.play().catch(e => {
-            console.log('Background music autoplay blocked');
+            console.log('Audio play failed:', e);
         });
     }
     
@@ -86,12 +68,6 @@ class HangmanGame {
             btn.disabled = false;
             btn.classList.remove('correct', 'wrong');
         });
-        
-        // Restart background music if audio is enabled
-        if (this.audioEnabled) {
-            this.backgroundMusic.currentTime = 0;
-            this.backgroundMusic.play().catch(e => console.log('Music play failed'));
-        }
     }
     
     guessLetter(letter) {
@@ -142,13 +118,13 @@ class HangmanGame {
             this.gameOver = true;
             this.gameStatus.textContent = 'Congratulations! You won! 🎉';
             this.gameStatus.className = 'game-status win';
-            if (this.audioEnabled) this.winSound.play();
+            this.winSound.play();
             this.disableKeyboard();
         } else if (this.wrongLetters.size >= this.maxWrong) {
             this.gameOver = true;
             this.gameStatus.textContent = `Game Over! The word was: ${this.word}`;
             this.gameStatus.className = 'game-status lose';
-            if (this.audioEnabled) this.loseSound.play();
+            this.loseSound.play();
             this.disableKeyboard();
         }
     }
@@ -159,8 +135,3 @@ class HangmanGame {
         });
     }
 }
-
-// Initialize the game when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    new HangmanGame();
-});
