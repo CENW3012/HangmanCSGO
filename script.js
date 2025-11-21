@@ -34,7 +34,7 @@ class HangmanGame {
     }
     
     startBackgroundMusic() {
-        this.backgroundMusic.volume = 40;
+        this.backgroundMusic.volume = 0.3;
         this.backgroundMusic.play().catch(e => {
             console.log('Audio play failed:', e);
         });
@@ -135,3 +135,8 @@ class HangmanGame {
         });
     }
 }
+
+// Initialize the game when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    new HangmanGame();
+});
